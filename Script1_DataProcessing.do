@@ -1944,6 +1944,8 @@ tab edu, m
 tab c755, m
 
 replace c755 = . if c755 < 0 | c755 == 65
+replace c755 = 5 if c755 == 6
+label define c755 5 "IV/V" 6 "" 65 "", modify
 rename c755 occSocClass
 tab occSocClass, m
 
@@ -1951,6 +1953,7 @@ tab occSocClass, m
 tab h470, m
 
 replace h470 = . if h470 < 0
+label define h470 1 "<£100" 2 "£100 - £199" 3 "£200 - £299" 4 "£300 - £399" 5 "£400+", modify
 rename h470 income
 tab income, m
 
@@ -3265,6 +3268,8 @@ tab edu, m
 tab c765, m
 
 replace c765 = . if c765 < 0 | c765 == 65
+replace c765 = 5 if c765 == 6
+label define c765 5 "IV/V" 6 "" 65 "", modify
 rename c765 occSocClass
 tab occSocClass, m
 
@@ -3272,6 +3277,7 @@ tab occSocClass, m
 tab h470, m
 
 replace h470 = . if h470 < 0
+label define h470 1 "<£100" 2 "£100 - £199" 3 "£200 - £299" 4 "£300 - £399" 5 "£400+", modify
 rename h470 income
 tab income, m
 
