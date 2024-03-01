@@ -69,9 +69,11 @@ label define q_lb 1 "The weather" 2 "Future generations" 3 "The economy" 4 "Thei
 label values question q_lb
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Partner results")
+	ytitle("Percent") title("G0 partner results")
 	
-graph export "./Results/AffectedByClimateChange_Partners.pdf", replace
+graph export ".\Results\AffectedByClimateChange_Partners.pdf", replace
+graph save ".\Results\AffectedByClimateChange_Partners.gph", replace
+graph export ".\Results\AffectedByClimateChange_Partners.eps", replace
 
 * Read back in dataset
 use "B4123_partnerData_processed.dta", clear
@@ -110,10 +112,12 @@ label values question q
 
 graph hbar (count), over(graph_) over(question, label(labsize(small))) ///
 	stack asyvars percent ///
-	ytitle("Percent") title("Partner results") ///
+	ytitle("Percent") title("G0 partner results") ///
 	legend(rows(1) position(6) size(small))
 	
 graph export ".\Results\climateActions_partners.pdf", replace
+graph save ".\Results\climateActions_partners.gph", replace
+graph export ".\Results\climateActions_partners.eps", replace
 
 * Read back in the original data
 use "B4123_partnerData_processed.dta", clear
@@ -152,9 +156,11 @@ label define q 1 "Recycled more" 2 "Reduced plastic use" 3 "Reduced household wa
 label values question q
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Partner results")
+	ytitle("Percent") title("G0 partner results")
 
 graph export ".\Results\climateActions_binary_partners.pdf", replace
+graph save ".\Results\climateActions_binary_partners.gph", replace
+graph export ".\Results\climateActions_binary_partners.eps", replace
 
 * Read back in the original data
 use "B4123_partnerData_processed.dta", clear
@@ -166,9 +172,11 @@ sum total_actions total_actions_red total_actions_excKids total_actions_red_excK
 tab1 total_actions total_actions_red total_actions_excKids total_actions_red_excKids
 
 hist total_actions, freq discrete ///
-	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (Partner results)")
+	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (G0 partner results)")
 	
 graph export ".\Results\totalClimateActions_hist_partners.pdf", replace
+graph save ".\Results\totalClimateActions_hist_partners.gph", replace
+graph export ".\Results\totalClimateActions_hist_partners.eps", replace
 
 
 ****************************************************************************
@@ -604,12 +612,15 @@ graph hbox total_actions, over(imd, label(labsize(small))) name(imd, replace) //
 	ylabel(0(1)17, labsize(vsmall))
 
 graph combine age ethnicity edu occSocClass income imd, ///
-	cols(1) imargin(zero) ysize(20) xsize(12)
+	cols(1) imargin(zero) ysize(20) xsize(12) ///
+	title("G0 partners", size(medium))
 
 graph export ".\Results\sociodemoResults_actions_partners.pdf", replace
+graph save ".\Results\sociodemoResults_actions_partners.gph", replace
+graph export ".\Results\sociodemoResults_actions_partners.eps", replace
 
 
-** Making box plot comparing number of actions by different sociodemographic factors
+** Making box plot comparing number of actions by different climate belief factors
 graph hbox total_actions, over(climateChanging, label(labsize(small))) ///
 	name(change, replace) ytitle("Total number of actions", size(small)) ///
 	title("Belief in climate change", size(medium)) ylabel(0(1)17, labsize(vsmall))
@@ -627,9 +638,12 @@ graph hbox total_actions, over(climateAction, label(labsize(small))) ///
 	size(medium)) ylabel(0(1)17, labsize(vsmall))
 
 graph combine change concern humans action, ///
-	cols(1) imargin(zero) ysize(16) xsize(12)
+	cols(1) imargin(zero) ysize(16) xsize(12) ///
+	title("G0 partners", size(medium))
 
 graph export ".\Results\climateBeliefs_actions_partners.pdf", replace
+graph save ".\Results\climateBeliefs_actions_partners.gph", replace
+graph export ".\Results\climateBeliefs_actions_partners.eps", replace
 
 * Read back in the original data
 use "B4123_partnerData_processed.dta", clear
@@ -659,3 +673,86 @@ tab ethnicity if age != .
 graph close _all
 log close
 clear
+
+
+****************************************************************************
+*** Creating combined graphs across the generations
+
+** Life domains affected by climate change
+graph use ".\Results\AffectedByClimateChange_Offspring.gph", name(g1, replace)
+graph use ".\Results\AffectedByClimateChange_Mothers.gph", name(mum, replace)
+graph use ".\Results\AffectedByClimateChange_Partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(1) imargin(0 0 1 1) ysize(16) xsize(12)
+
+graph export ".\Results\AffectedByClimateChange_combined.pdf", replace
+graph save ".\Results\AffectedByClimateChange_combined.gph", replace
+graph export ".\Results\AffectedByClimateChange_combined.eps", replace
+
+
+** Individual actions (categorical) 
+graph use ".\Results\climateActions_offspring.gph", name(g1, replace)
+graph use ".\Results\climateActions_mothers.gph", name(mum, replace)
+graph use ".\Results\climateActions_partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(1) imargin(0 0 1 1) iscale(.5) ysize(16) xsize(12)
+
+graph export ".\Results\climateActions_combined.pdf", replace
+graph save ".\Results\climateActions_combined.gph", replace
+graph export ".\Results\climateActions_combined.eps", replace
+
+
+** Individual actions (binary) 
+graph use ".\Results\climateActions_binary_offspring.gph", name(g1, replace)
+graph use ".\Results\climateActions_binary_mothers.gph", name(mum, replace)
+graph use ".\Results\climateActions_binary_partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(1) imargin(0 0 1 1) iscale(.5) ysize(16) xsize(12)
+
+graph export ".\Results\climateActions_binary_combined.pdf", replace
+graph save ".\Results\climateActions_binary_combined.gph", replace
+graph export ".\Results\climateActions_binary_combined.eps", replace
+
+
+** Total number of climate actions
+graph use ".\Results\totalClimateActions_hist_offspring.gph", name(g1, replace)
+graph use ".\Results\totalClimateActions_hist_mothers.gph", name(mum, replace)
+graph use ".\Results\totalClimateActions_hist_partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(1) imargin(0 0 1 1) iscale(.7) ysize(16) xsize(12)
+
+graph export ".\Results\totalClimateActions_hist_combined.pdf", replace
+graph save ".\Results\totalClimateActions_hist_combined.gph", replace
+graph export ".\Results\totalClimateActions_hist_combined.eps", replace
+
+
+** Sociodemographic results with number of actions
+graph use ".\Results\sociodemoResults_actions_offspring.gph", name(g1, replace)
+graph use ".\Results\sociodemoResults_actions_mothers.gph", name(mum, replace)
+graph use ".\Results\sociodemoResults_actions_partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(3) imargin(1 1 0 0) iscale(.6) ysize(20) xsize(35)
+
+graph export ".\Results\sociodemoResults_actions_combined.pdf", replace
+graph save ".\Results\sociodemoResults_actions_combined.gph", replace
+graph export ".\Results\sociodemoResults_actions_combined.eps", replace
+
+
+** Climate belief results with number of actions
+graph use ".\Results\climateBeliefs_actions_offspring.gph", name(g1, replace)
+graph use ".\Results\climateBeliefs_actions_mothers.gph", name(mum, replace)
+graph use ".\Results\climateBeliefs_actions_partners.gph", name(part, replace)
+
+graph combine g1 mum part, ///
+	cols(3) imargin(1 1 0 0) iscale(.7) ysize(16) xsize(30)
+
+graph export ".\Results\climateBeliefs_actions_combined.pdf", replace
+graph save ".\Results\climateBeliefs_actions_combined.gph", replace
+graph export ".\Results\climateBeliefs_actions_combined.eps", replace
+
+graph close _all

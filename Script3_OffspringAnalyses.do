@@ -69,9 +69,11 @@ label define q_lb 1 "The weather" 2 "Future generations" 3 "The economy" 4 "Thei
 label values question q_lb
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Offspring results")
+	ytitle("Percent") title("G1 offspring results")
 	
-graph export "./Results/AffectedByClimateChange_Offspring.pdf", replace
+graph export ".\Results\AffectedByClimateChange_Offspring.pdf", replace
+graph save ".\Results\AffectedByClimateChange_Offspring.gph", replace
+graph export ".\Results\AffectedByClimateChange_Offspring.eps", replace
 
 * Read back in dataset
 use "B4123_offspringData_processed.dta", clear
@@ -110,10 +112,12 @@ label values question q
 
 graph hbar (count), over(graph_) over(question, label(labsize(small))) ///
 	stack asyvars percent ///
-	ytitle("Percent") title("Offspring results") ///
+	ytitle("Percent") title("G1 offspring results") ///
 	legend(rows(1) position(6) size(small))
 	
 graph export ".\Results\climateActions_offspring.pdf", replace
+graph save ".\Results\climateActions_offspring.gph", replace
+graph export ".\Results\climateActions_offspring.eps", replace
 
 * Read back in the original data
 use "B4123_offspringData_processed.dta", clear
@@ -151,9 +155,11 @@ label define q 1 "Recycled more" 2 "Reduced plastic use" 3 "Reduced household wa
 label values question q
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Offspring results")
+	ytitle("Percent") title("G1 offspring results")
 
 graph export ".\Results\climateActions_binary_offspring.pdf", replace
+graph save ".\Results\climateActions_binary_offspring.gph", replace
+graph export ".\Results\climateActions_binary_offspring.eps", replace
 
 * Read back in the original data
 use "B4123_offspringData_processed.dta", clear
@@ -165,9 +171,11 @@ sum total_actions total_actions_red total_actions_excKids total_actions_red_excK
 tab1 total_actions total_actions_red total_actions_excKids total_actions_red_excKids
 
 hist total_actions, freq discrete ///
-	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (Offspring results)")
+	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (G1 offspring results)")
 	
 graph export ".\Results\totalClimateActions_hist_offspring.pdf", replace
+graph save ".\Results\totalClimateActions_hist_offspring.gph", replace
+graph export ".\Results\totalClimateActions_hist_offspring.eps", replace
 
 
 ****************************************************************************
@@ -371,12 +379,15 @@ graph hbox total_actions, over(imd, label(labsize(small))) name(imd, replace) //
 	ylabel(0(1)17, labsize(vsmall))
 
 graph combine age sex ethnicity edu occSocClass income imd, ///
-	cols(1) imargin(zero) ysize(20) xsize(12)
+	cols(1) imargin(zero) ysize(20) xsize(12) ///
+	title("G1 offspring", size(medium))
 
 graph export ".\Results\sociodemoResults_actions_offspring.pdf", replace
+graph save ".\Results\sociodemoResults_actions_offspring.gph", replace
+graph export ".\Results\sociodemoResults_actions_offspring.eps", replace
 
 
-** Making box plot comparing number of actions by different sociodemographic factors
+** Making box plot comparing number of actions by different climate belief factors
 graph hbox total_actions, over(climateChanging, label(labsize(small))) ///
 	name(change, replace) ytitle("Total number of actions", size(small)) ///
 	title("Belief in climate change", size(medium)) ylabel(0(1)17, labsize(vsmall))
@@ -394,9 +405,12 @@ graph hbox total_actions, over(climateAction, label(labsize(small))) ///
 	size(medium)) ylabel(0(1)17, labsize(vsmall))
 
 graph combine change concern humans action, ///
-	cols(1) imargin(zero) ysize(16) xsize(12)
+	cols(1) imargin(zero) ysize(16) xsize(12) ///
+	title("G1 offspring", size(medium))
 
 graph export ".\Results\climateBeliefs_actions_offspring.pdf", replace
+graph save ".\Results\climateBeliefs_actions_offspring.gph", replace
+graph export ".\Results\climateBeliefs_actions_offspring.eps", replace
 
 * Read back in the original data
 use "B4123_offspringData_processed.dta", clear
@@ -447,10 +461,12 @@ regress total_actions_excKids total_actions_excKids_mum
 twoway (scatter total_actions_excKids total_actions_excKids_mum, ///
 	jitter(3) jitterseed(4321) legend(off)) ///
 	(lfitci total_actions_excKids total_actions_excKids_mum, legend(off)), ///
-	ytitle("Total number of climate actions (offspring)") ///
-	xtitle("Total number of climate actions (mothers)")
+	ytitle("Total number of climate actions (G1 offspring)") ///
+	xtitle("Total number of climate actions (G0 mothers)")
 		
 graph export ".\Results\offspringMothers_totalActions.pdf", replace
+graph save ".\Results\offspringMothers_totalActions.gph", replace
+graph export ".\Results\offspringMothers_totalActions.eps", replace
 
 corr total_actions_excKids total_actions_excKids_ptnr
 regress total_actions_excKids total_actions_excKids_ptnr
@@ -458,10 +474,12 @@ regress total_actions_excKids total_actions_excKids_ptnr
 twoway (scatter total_actions_excKids total_actions_excKids_ptnr, ///
 	jitter(3) jitterseed(4321) legend(off)) ///
 	(lfitci total_actions_excKids total_actions_excKids_ptnr, legend(off)), ///
-	ytitle("Total number of climate actions (offspring)") ///
-	xtitle("Total number of climate actions (partners)")
+	ytitle("Total number of climate actions (G1 offspring)") ///
+	xtitle("Total number of climate actions (G0 partners)")
 
 graph export ".\Results\offspringPartners_totalActions.pdf", replace
+graph save ".\Results\offspringPartners_totalActions.gph", replace
+graph export ".\Results\offspringPartners_totalActions.eps", replace
 
 
 *****************************************************************************

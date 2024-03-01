@@ -69,9 +69,11 @@ label define q_lb 1 "The weather" 2 "Future generations" 3 "The economy" 4 "Thei
 label values question q_lb
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Mother results")
+	ytitle("Percent") title("G0 mother results")
 	
-graph export "./Results/AffectedByClimateChange_Mothers.pdf", replace
+graph export ".\Results\AffectedByClimateChange_Mothers.pdf", replace
+graph save ".\Results\AffectedByClimateChange_Mothers.gph", replace
+graph export ".\Results\AffectedByClimateChange_Mothers.eps", replace
 
 * Read back in dataset
 use "B4123_motherData_processed.dta", clear
@@ -110,10 +112,12 @@ label values question q
 
 graph hbar (count), over(graph_) over(question, label(labsize(small))) ///
 	stack asyvars percent ///
-	ytitle("Percent") title("Mother results") ///
+	ytitle("Percent") title("G0 mother results") ///
 	legend(rows(1) position(6) size(small))
 	
 graph export ".\Results\climateActions_mothers.pdf", replace
+graph save ".\Results\climateActions_mothers.gph", replace
+graph export ".\Results\climateActions_mothers.eps", replace
 
 * Read back in the original data
 use "B4123_motherData_processed.dta", clear
@@ -152,9 +156,11 @@ label define q 1 "Reduced plastic use" 2 "Recycled more" 3 "Reduced household wa
 label values question q
 
 graph hbar (count), over(graph_) over(question) stack asyvars percent ///
-	ytitle("Percent") title("Mother results")
+	ytitle("Percent") title("G0 mother results")
 
 graph export ".\Results\climateActions_binary_mothers.pdf", replace
+graph save ".\Results\climateActions_binary_mothers.gph", replace
+graph export ".\Results\climateActions_binary_mothers.eps", replace
 
 * Read back in the original data
 use "B4123_motherData_processed.dta", clear
@@ -166,9 +172,11 @@ sum total_actions total_actions_red total_actions_excKids total_actions_red_excK
 tab1 total_actions total_actions_red total_actions_excKids total_actions_red_excKids
 
 hist total_actions, freq discrete ///
-	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (Mother results)")
+	xlabel(0(3)18) xtitle("Total number of actions taken due to climate concern (G0 mother results)")
 	
 graph export ".\Results\totalClimateActions_hist_mothers.pdf", replace
+graph save ".\Results\totalClimateActions_hist_mothers.gph", replace
+graph export ".\Results\totalClimateActions_hist_mothers.eps", replace
 
 
 ****************************************************************************
@@ -588,12 +596,15 @@ graph hbox total_actions, over(imd, label(labsize(small))) name(imd, replace) //
 	ylabel(0(1)17, labsize(vsmall))
 
 graph combine age ethnicity edu occSocClass income imd, ///
-	cols(1) imargin(zero) ysize(20) xsize(12)
+	cols(1) imargin(zero) ysize(20) xsize(12) ///
+	title("G0 mothers", size(medium))
 
 graph export ".\Results\sociodemoResults_actions_mothers.pdf", replace
+graph save ".\Results\sociodemoResults_actions_mothers.gph", replace
+graph export ".\Results\sociodemoResults_actions_mothers.eps", replace
 
 
-** Making box plot comparing number of actions by different sociodemographic factors
+** Making box plot comparing number of actions by different climate belief factors
 graph hbox total_actions, over(climateChanging, label(labsize(small))) ///
 	name(change, replace) ytitle("Total number of actions", size(small)) ///
 	title("Belief in climate change", size(medium)) ylabel(0(1)17, labsize(vsmall))
@@ -611,9 +622,12 @@ graph hbox total_actions, over(climateAction, label(labsize(small))) ///
 	size(medium)) ylabel(0(1)17, labsize(vsmall))
 
 graph combine change concern humans action, ///
-	cols(1) imargin(zero) ysize(16) xsize(12)
+	cols(1) imargin(zero) ysize(16) xsize(12) ///
+	title("G0 mothers", size(medium))
 
 graph export ".\Results\climateBeliefs_actions_mothers.pdf", replace
+graph save ".\Results\climateBeliefs_actions_mothers.gph", replace
+graph export ".\Results\climateBeliefs_actions_mothers.eps", replace
 
 * Read back in the original data
 use "B4123_motherData_processed.dta", clear
@@ -654,11 +668,12 @@ regress total_actions_excKids total_actions_excKids_ptnr
 twoway (scatter total_actions_excKids total_actions_excKids_ptnr, ///
 	jitter(3) jitterseed(4321) legend(off)) ///
 	(lfitci total_actions_excKids total_actions_excKids_ptnr, legend(off)), ///
-	ytitle("Total number of climate actions (mothers)") ///
-	xtitle("Total number of climate actions (partners)")
+	ytitle("Total number of climate actions (G0 mothers)") ///
+	xtitle("Total number of climate actions (G0 partners)")
 		
 graph export ".\Results\mothersPartners_totalActions.pdf", replace
-
+graph save ".\Results\mothersPartners_totalActions.gph", replace
+graph export ".\Results\mothersPartners_totalActions.eps", replace
 
 
 *****************************************************************************
